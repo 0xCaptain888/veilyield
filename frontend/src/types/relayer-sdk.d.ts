@@ -7,19 +7,19 @@ declare module "@zama-fhe/relayer-sdk" {
     generateKeypair(): { publicKey: string; privateKey: string };
     createEIP712(
       publicKey: string,
-      contracts: string[],
-      startTimestamp: string,
-      durationDays: string,
+      contractAddresses: string[],
+      startTimestamp: number,
+      durationDays: number,
     ): any;
     userDecrypt(
       handles: { handle: string; contractAddress: string }[],
       privateKey: string,
       publicKey: string,
       signature: string,
-      contracts: string[],
+      contractAddresses: string[],
       userAddress: string,
-      startTimestamp: string,
-      durationDays: string,
+      startTimestamp: number,
+      durationDays: number,
     ): Promise<Record<string, bigint | number>>;
   }
 

@@ -58,15 +58,15 @@ export async function userDecrypt(
   const userAddress = await signer.getAddress();
 
   const keypair = fhevm.generateKeypair();
-  const startTimestamp = Math.floor(Date.now() / 1000).toString();
-  const durationDays = "7";
+  const startTimestamp = Math.floor(Date.now() / 1000);
+  const durationDays = 7;
   const contracts = [contractAddress];
 
   const eip712 = fhevm.createEIP712(keypair.publicKey, contracts, startTimestamp, durationDays);
 
   const signature = await signer.signTypedData(
     eip712.domain,
-    { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
+    { UserDecryptRequestVerification: [...eip712.types.UserDecryptRequestVerification] },
     eip712.message,
   );
 
@@ -81,7 +81,7 @@ export async function userDecrypt(
     durationDays,
   );
 
-  const value = results[handle];
+  const value = results[handle as `0x${string}`];
   return typeof value === "bigint" ? value : BigInt(value ?? 0);
 }
 
