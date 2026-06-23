@@ -27,8 +27,9 @@ export async function getFhevm(): Promise<FhevmInstance> {
     await ensureSdkInitialized();
     instancePromise = createInstance({
       ...SepoliaConfig,
-      // Allow overriding the host-chain RPC the SDK uses (optional).
-      network: import.meta.env.VITE_SEPOLIA_RPC_URL || (SepoliaConfig as any).network,
+      // The new SDK (0.4.4) no longer includes a default network URL,
+      // so we must provide an explicit Sepolia RPC endpoint.
+      network: import.meta.env.VITE_SEPOLIA_RPC_URL || "https://eth-sepolia.public.blastapi.io",
     });
   }
   return instancePromise;
