@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
+    { "source": "/api/relayer/:path*", "destination": "https://relayer.testnet.zama.org/:path*" },
     { "source": "/(.*)", "destination": "/" }
   ],
   "headers": [

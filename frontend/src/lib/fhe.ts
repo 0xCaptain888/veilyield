@@ -27,6 +27,8 @@ export async function getFhevm(): Promise<FhevmInstance> {
     await ensureSdkInitialized();
     instancePromise = createInstance({
       ...SepoliaConfig,
+      // Use a proxy to bypass CORS restrictions on the relayer
+      relayerUrl: "/api/relayer",
       // The new SDK (0.4.4) no longer includes a default network URL,
       // so we must provide an explicit Sepolia RPC endpoint.
       network: import.meta.env.VITE_SEPOLIA_RPC_URL || "https://eth-sepolia.public.blastapi.io",
