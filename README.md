@@ -1,5 +1,7 @@
 # VeilYield — Confidential, Composable Yield Router
 
+> 🚀 **Live Demo:** https://zxlrksd6.mule.page/
+
 [![GitHub](https://img.shields.io/badge/GitHub-0xCaptain888%2Fveilyield-blue?logo=github)](https://github.com/0xCaptain888/veilyield)
 [![License](https://img.shields.io/badge/License-BSD--3--Clause--Clear-green)](./LICENSE)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.27-purple)](https://soliditylang.org/)
