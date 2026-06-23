@@ -77,8 +77,8 @@ The frontend renders every encrypted balance as a **shimmering masked ciphertext
 Prerequisites: **Node.js ≥ 20**, npm, and a browser wallet (MetaMask) for the frontend.
 
 ```bash
-# 1. Install contract deps
-npm install
+# 1. Install contract deps (FHEVM peer deps require --legacy-peer-deps)
+npm install --legacy-peer-deps
 
 # 2. Compile + run the full test suite on the FHEVM mock runtime
 npm run compile
