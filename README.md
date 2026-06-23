@@ -1,7 +1,14 @@
 # VeilYield — Confidential, Composable Yield Router
 
+[![GitHub](https://img.shields.io/badge/GitHub-0xCaptain888%2Fveilyield-blue?logo=github)](https://github.com/0xCaptain888/veilyield)
+[![License](https://img.shields.io/badge/License-BSD--3--Clause--Clear-green)](./LICENSE)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.27-purple)](https://soliditylang.org/)
+[![Tests](https://img.shields.io/badge/Tests-6%20passing-brightgreen)](./test/ConfidentialVaultRouter.test.ts)
+
 > **Zama Developer Program — Mainnet Season 3, Builder Track.**
 > Move confidential ERC-7984 tokens in and out of public ERC-4626 DeFi vaults **without revealing your individual position**, and migrate between vaults in one click — still encrypted.
+
+**Repository:** https://github.com/0xCaptain888/veilyield
 
 VeilYield is the Season 3 thesis ("**Composable Privacy Is the Key**") made concrete: a confidential asset composed with the rest of the public EVM. It takes the pooling pattern Zama shipped in its first confidential vault stack and turns it into a **user-facing, multi-vault yield router** with a confidential cross-vault migration flow that the single-vault v1 batcher does not yet expose.
 
