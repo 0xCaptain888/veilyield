@@ -15,6 +15,20 @@ import { createInstance, initSDK, SepoliaConfig, type FhevmInstance } from "@zam
 let instancePromise: Promise<FhevmInstance> | null = null;
 let sdkInitialized = false;
 
+// The Zama relayer (relayer.testnet.zama.org) does not send CORS headers,
+// so browser fetch calls fail. We monkey-patch window.fetch to route
+// relayer requests through our same-origin Vercel proxy at /api/relayer.
+const RELAYER_ORIGIN = "https://relayer.testnet.zama.org";
+const originalFetch = window.fetch.bind(window);
+window.fetch = async function patchedFetch(input: RequestInfo | URL, init?: RequestInit) {
+  const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+  if (url.startsWith(RELAYER_ORIGIN)) {
+    const proxied = url.replace(RELAYER_ORIGIN, "/api/relayer");
+    return originalFetch(proxied, init);
+  }
+  return originalFetch(input, init);
+};
+
 async function ensureSdkInitialized(): Promise<void> {
   if (!sdkInitialized) {
     await initSDK();
@@ -27,10 +41,9 @@ export async function getFhevm(): Promise<FhevmInstance> {
     await ensureSdkInitialized();
     instancePromise = createInstance({
       ...SepoliaConfig,
-      // Use a proxy to bypass CORS restrictions on the relayer
-      relayerUrl: "/api/relayer",
-      // The new SDK (0.4.4) no longer includes a default network URL,
-      // so we must provide an explicit Sepolia RPC endpoint.
+      // Use the real Zama URL so SDK validation passes;
+      // our fetch patch transparently routes through the proxy.
+      relayerUrl: SepoliaConfig.relayerUrl,
       network: import.meta.env.VITE_SEPOLIA_RPC_URL || "https://eth-sepolia.public.blastapi.io",
     });
   }
