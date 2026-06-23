@@ -356,11 +356,11 @@ export default function App() {
               >
                 {busy === "dispatch" && <span className="spinner" />}Dispatch batch
               </button>
-              {selectedBatch && selectedBatch !== 0n && (
+              {selectedBatch && selectedBatch !== 0n ? (
                 <button className="ghost" onClick={() => doClaim(selectedBatch!)} disabled={busy === "claim"}>
                   {busy === "claim" && <span className="spinner" />}Claim / reclaim
                 </button>
-              )}
+              ) : null}
             </div>
 
             {/* Anonymity meter — honest privacy disclosure */}

@@ -1,5 +1,5 @@
 import { BrowserProvider, Eip1193Provider } from "ethers";
-import { createInstance, SepoliaConfig, type FhevmInstance } from "@zama-fhe/relayer-sdk";
+import { createInstance, SepoliaConfig, type FhevmInstance } from "@zama-fhe/relayer-sdk/web";
 
 /**
  * Thin wrapper around the Zama Relayer SDK for the browser.
