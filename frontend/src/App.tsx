@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
-import { useWallet, getContracts, addresses } from "./hooks/useWallet";
+import { useWallet, getContracts, addresses, getSupportedWallet } from "./hooks/useWallet";
 import { encryptAmount, userDecrypt } from "./lib/fhe";
 import { CipherBalance } from "./components/CipherBalance";
 
@@ -237,9 +237,23 @@ export default function App() {
             {w.address.slice(0, 6)}…{w.address.slice(-4)}
           </span>
         ) : (
-          <button className="primary" onClick={w.connect} disabled={w.connecting}>
-            {w.connecting ? "Connecting…" : "Connect wallet"}
-          </button>
+          <div className="wallet-buttons">
+            {typeof window !== "undefined" && (window as any).okxwallet && (
+              <button className="primary" onClick={() => w.connect("okx")} disabled={w.connecting}>
+                {w.connecting ? "Connecting…" : "OKX Wallet"}
+              </button>
+            )}
+            {typeof window !== "undefined" && (window as any).ethereum?.isMetaMask && (
+              <button className="ghost" onClick={() => w.connect("metamask")} disabled={w.connecting}>
+                {w.connecting ? "Connecting…" : "MetaMask"}
+              </button>
+            )}
+            {typeof window !== "undefined" && !(window as any).okxwallet && !(window as any).ethereum?.isMetaMask && (
+              <button className="primary" onClick={() => w.connect()} disabled={w.connecting}>
+                {w.connecting ? "Connecting…" : "Install Wallet"}
+              </button>
+            )}
+          </div>
         )}
       </div>
 
