@@ -24,6 +24,12 @@
 
 **Deployer:** `0x10C49F235aE24911dA110fE6088E0F0513bA6f94` · **Network:** Sepolia (Chain ID 11155111)
 
+## Live Demo
+
+**Frontend:** https://frontend-five-gamma-10.vercel.app
+
+Connect your wallet (MetaMask on Sepolia), use the **Faucet** button to get test cUSDC, then try the full flow: Encrypt → Join batch → Dispatch → Claim → Migrate.
+
 ---
 
 VeilYield is the Season 3 thesis ("**Composable Privacy Is the Key**") made concrete: a confidential asset composed with the rest of the public EVM. It takes the pooling pattern Zama shipped in its first confidential vault stack and turns it into a **user-facing, multi-vault yield router** with a confidential cross-vault migration flow that the single-vault v1 batcher does not yet expose.
