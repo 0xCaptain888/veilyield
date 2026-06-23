@@ -14,7 +14,8 @@
     "seed:local": "hardhat seed --network localhost",
     "seed:sepolia": "hardhat seed --network sepolia",
     "node": "hardhat node",
-    "lint": "solhint 'contracts/**/*.sol'"
+    "lint": "solhint 'contracts/**/*.sol'",
+    "install:force": "npm install --legacy-peer-deps"
   },
   "devDependencies": {
     "@fhevm/hardhat-plugin": "^0.1.0",

@@ -10,6 +10,22 @@
 
 **Repository:** https://github.com/0xCaptain888/veilyield
 
+## Deployed Addresses (Sepolia Testnet)
+
+| Contract | Address |
+|---|---|
+| **ConfidentialVaultRouter** | `0xC8ABC28Bf9752506BE134420fF89E36b474c3398` |
+| MockERC20 (USDC) | `0x3313910634df0ea4Ea9dfd2CB99a196f502B4b57` |
+| cUSDC | `0xA7834C76489cc95AFDfCCb5d22895AB3c81c0f5c` |
+| Steakhouse Prime Vault | `0x25769fE40d5Be10df14550647c60c6b85b7D9387` |
+| Steakhouse Core Vault | `0x1C4C53C8918355c65c96E6411F81dfdb2e2954FD` |
+| cShareSteakPrime | `0xB44242402c9462DB42E313727fA0F92C6b2F7C42` |
+| cShareSteakCore | `0x5B4ECf4abc95441017D65407F61b2fb3cDDdff26` |
+
+**Deployer:** `0x10C49F235aE24911dA110fE6088E0F0513bA6f94` · **Network:** Sepolia (Chain ID 11155111)
+
+---
+
 VeilYield is the Season 3 thesis ("**Composable Privacy Is the Key**") made concrete: a confidential asset composed with the rest of the public EVM. It takes the pooling pattern Zama shipped in its first confidential vault stack and turns it into a **user-facing, multi-vault yield router** with a confidential cross-vault migration flow that the single-vault v1 batcher does not yet expose.
 
 ---

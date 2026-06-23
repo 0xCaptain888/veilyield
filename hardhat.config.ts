@@ -7,13 +7,19 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-// Read secrets from environment (.env). MNEMONIC funds deployments; a 12-word test mnemonic is
-// fine for Sepolia. Never commit a real mnemonic — see .env.example.
+// Read secrets from environment (.env). Support both PRIVATE_KEY and MNEMONIC.
+// Never commit secrets — see .env.example.
+const PRIVATE_KEY: string | undefined = process.env.PRIVATE_KEY;
 const MNEMONIC: string =
   process.env.MNEMONIC || "test test test test test test test test test test test junk";
 const SEPOLIA_RPC_URL: string =
   process.env.SEPOLIA_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com";
 const ETHERSCAN_API_KEY: string = process.env.ETHERSCAN_API_KEY || "";
+
+// Build the sepolia accounts config: prefer private key if set, fall back to mnemonic.
+const sepoliaAccounts: any = PRIVATE_KEY
+  ? [PRIVATE_KEY]
+  : { mnemonic: MNEMONIC, path: "m/44'/60'/0'/0", count: 10 };
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -40,11 +46,7 @@ const config: HardhatUserConfig = {
     sepolia: {
       url: SEPOLIA_RPC_URL,
       chainId: 11155111,
-      accounts: {
-        mnemonic: MNEMONIC,
-        path: "m/44'/60'/0'/0",
-        count: 10,
-      },
+      accounts: sepoliaAccounts,
     },
   },
   namedAccounts: {
