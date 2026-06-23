@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Hardhat
+artifacts/
+cache/
+types/
+coverage/
+coverage.json
+
+# Deployment artifacts (hardhat-deploy writes here; addresses.*.json is kept intentionally)
+deployments/*/solcInputs/
+
+# Frontend build
+frontend/dist/
+
+# Env / secrets — NEVER commit
+.env
+frontend/.env
+
+# Misc
+.DS_Store
+*.log
+npm-debug.log*
+.idea/
+.vscode/

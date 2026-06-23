@@ -1,0 +1,497 @@
+/* ============================================================================
+   VeilYield — "encrypted ledger terminal" aesthetic
+   - deep ink canvas, single phosphor-mint accent
+   - monospace for all numeric / ciphertext values; humanist sans for prose
+   - signature: masked ciphertext that shimmers until revealed (decrypted)
+   ========================================================================== */
+
+:root {
+  --ink: #0a0e14;
+  --ink-raised: #10161f;
+  --ink-card: #131b26;
+  --line: #1f2a37;
+  --line-bright: #2b3a4d;
+  --text: #e6edf3;
+  --text-dim: #8b9aab;
+  --text-faint: #5b6979;
+  --mint: #5ef0c0; /* phosphor accent — encryption/alive */
+  --mint-deep: #2bbf95;
+  --amber: #f0c674; /* secondary signal — pending/awaiting */
+  --rose: #f07a8c; /* error / cancelled */
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.02), 0 8px 30px rgba(0, 0, 0, 0.5);
+  --mono: "SFMono-Regular", "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image: radial-gradient(
+      1200px 600px at 80% -10%,
+      rgba(94, 240, 192, 0.06),
+      transparent 60%
+    ),
+    radial-gradient(900px 500px at 0% 0%, rgba(94, 240, 192, 0.03), transparent 55%);
+}
+
+a {
+  color: var(--mint);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 22px 80px;
+}
+
+/* ---- top bar ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0 22px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.brand .mark {
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-size: 20px;
+  color: var(--text);
+}
+.brand .mark b {
+  color: var(--mint);
+}
+.brand .tag {
+  font-size: 12px;
+  color: var(--text-faint);
+  letter-spacing: 0.3px;
+}
+
+.pill {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+button {
+  font-family: var(--sans);
+  cursor: pointer;
+  border: 1px solid var(--line-bright);
+  background: var(--ink-raised);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  transition: border-color 0.15s, background 0.15s, transform 0.05s;
+}
+button:hover:not(:disabled) {
+  border-color: var(--mint-deep);
+}
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+button.primary {
+  background: linear-gradient(180deg, rgba(94, 240, 192, 0.16), rgba(94, 240, 192, 0.06));
+  border-color: var(--mint-deep);
+  color: var(--mint);
+  font-weight: 600;
+}
+button.ghost {
+  background: transparent;
+}
+
+/* ---- hero ---- */
+.hero {
+  margin-bottom: 30px;
+}
+.hero h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -1px;
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+.hero h1 .veil {
+  position: relative;
+  color: var(--mint);
+}
+.hero p {
+  color: var(--text-dim);
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- cards ---- */
+.grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 18px;
+}
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--ink-card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.card h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--text-faint);
+  margin: 0 0 16px;
+  font-weight: 600;
+}
+.card h2 .num {
+  font-family: var(--mono);
+  color: var(--mint-deep);
+  margin-right: 8px;
+}
+
+/* ---- balance / ciphertext reveal (signature element) ---- */
+.balance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.balance-row:last-child {
+  border-bottom: none;
+}
+.balance-label {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.balance-label .sub {
+  display: block;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  margin-top: 2px;
+}
+
+.cipher {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.cipher .masked {
+  color: var(--mint);
+  background: linear-gradient(
+    90deg,
+    rgba(94, 240, 192, 0.25),
+    rgba(94, 240, 192, 0.6),
+    rgba(94, 240, 192, 0.25)
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2.4s linear infinite;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px dashed rgba(94, 240, 192, 0.4);
+}
+.cipher .revealed {
+  color: var(--text);
+  font-weight: 600;
+}
+.cipher .unit {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- vault list ---- */
+.vault {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  background: var(--ink-raised);
+  transition: border-color 0.15s;
+}
+.vault.selected {
+  border-color: var(--mint-deep);
+  background: linear-gradient(180deg, rgba(94, 240, 192, 0.06), transparent);
+}
+.vault-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.vault-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+.vault-apy {
+  font-family: var(--mono);
+  color: var(--mint);
+  font-size: 15px;
+}
+.vault-meta {
+  display: flex;
+  gap: 18px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+}
+
+/* ---- form ---- */
+.field {
+  margin-bottom: 14px;
+}
+.field label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.input-amt {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line-bright);
+  border-radius: 10px;
+  background: var(--ink);
+  overflow: hidden;
+}
+.input-amt input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 18px;
+  padding: 12px 14px;
+  outline: none;
+}
+.input-amt .suffix {
+  padding: 0 14px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* ---- anonymity meter (honest privacy disclosure) ---- */
+.anon {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px dashed var(--line-bright);
+  border-radius: 12px;
+  background: rgba(94, 240, 192, 0.03);
+}
+.anon-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.anon-head .k {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.anon-head .v {
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--mint);
+  font-weight: 700;
+}
+.anon-dots {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.anon-dots .dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 4px;
+  background: var(--mint);
+  box-shadow: 0 0 8px rgba(94, 240, 192, 0.5);
+}
+.anon-dots .dot.empty {
+  background: var(--line);
+  box-shadow: none;
+}
+.anon-note {
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+/* ---- batch status chips ---- */
+.chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--line-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.chip.open {
+  color: var(--mint);
+  border-color: var(--mint-deep);
+}
+.chip.dispatched {
+  color: var(--amber);
+  border-color: #6b5a2a;
+}
+.chip.settled {
+  color: var(--mint);
+  background: rgba(94, 240, 192, 0.08);
+}
+.chip.cancelled {
+  color: var(--rose);
+  border-color: #6b2a35;
+}
+
+/* ---- log / toast ---- */
+.log {
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  max-height: 160px;
+  overflow: auto;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+.log .ts {
+  color: var(--text-faint);
+}
+.log .ok {
+  color: var(--mint);
+}
+.log .err {
+  color: var(--rose);
+}
+
+.banner {
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  border: 1px solid;
+}
+.banner.warn {
+  background: rgba(240, 198, 116, 0.08);
+  border-color: #6b5a2a;
+  color: var(--amber);
+}
+.banner.err {
+  background: rgba(240, 122, 140, 0.08);
+  border-color: #6b2a35;
+  color: var(--rose);
+}
+
+.footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--text-faint);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.footer code {
+  font-family: var(--mono);
+  color: var(--text-dim);
+}
+
+.step-flow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 6px 0 18px;
+}
+.step-flow .s {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.step-flow .s.active {
+  color: var(--mint);
+  border-color: var(--mint-deep);
+}
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(94, 240, 192, 0.3);
+  border-top-color: var(--mint);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
