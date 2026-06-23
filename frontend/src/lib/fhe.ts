@@ -1,5 +1,5 @@
 import { BrowserProvider, Eip1193Provider } from "ethers";
-import { createInstance, SepoliaConfig, type FhevmInstance } from "@zama-fhe/relayer-sdk/web";
+import { createInstance, initSDK, SepoliaConfig, type FhevmInstance } from "@zama-fhe/relayer-sdk/web";
 
 /**
  * Thin wrapper around the Zama Relayer SDK for the browser.
@@ -13,9 +13,18 @@ import { createInstance, SepoliaConfig, type FhevmInstance } from "@zama-fhe/rel
  */
 
 let instancePromise: Promise<FhevmInstance> | null = null;
+let sdkInitialized = false;
+
+async function ensureSdkInitialized(): Promise<void> {
+  if (!sdkInitialized) {
+    await initSDK();
+    sdkInitialized = true;
+  }
+}
 
 export async function getFhevm(): Promise<FhevmInstance> {
   if (!instancePromise) {
+    await ensureSdkInitialized();
     instancePromise = createInstance({
       ...SepoliaConfig,
       // Allow overriding the host-chain RPC the SDK uses (optional).
