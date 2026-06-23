@@ -19,6 +19,9 @@ frontend/dist/
 .env
 frontend/.env
 
+# FHEVM build artifacts
+fhevmTemp/
+
 # Misc
 .DS_Store
 *.log
